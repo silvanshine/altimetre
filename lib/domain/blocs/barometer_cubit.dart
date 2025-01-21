@@ -57,7 +57,9 @@ class BarometerCubit extends Cubit<BarometerState> {
           emit(state.copyWith(pressure: () => null));
         },
       );
-    } catch (e) {/* no-op */}
+    } catch (e) {
+      /* no-op */
+    }
 
     try {
       _locationSubscription = _locationRepository.getLocationStream().listen(
@@ -68,13 +70,20 @@ class BarometerCubit extends Cubit<BarometerState> {
             ),
           );
           _forecast = await _weatherRepository.getWeatherAt(value);
+          emit(
+            state.copyWith(
+              temperature: () => _forecast?.temperature,
+            ),
+          );
           print(_forecast);
         },
         onError: (e) {
           emit(state.copyWith(gpsElevation: () => null));
         },
       );
-    } catch (e) {/* no-op */}
+    } catch (e) {
+      /* no-op */
+    }
   }
 
   @override

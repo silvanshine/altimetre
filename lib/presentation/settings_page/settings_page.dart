@@ -11,6 +11,14 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            print('SettingsPage: back button pressed');
+            Navigator.pop(
+                context, true); // Notify HomePage that settings changed
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

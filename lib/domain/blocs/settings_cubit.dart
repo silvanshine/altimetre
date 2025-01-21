@@ -11,14 +11,19 @@ class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({
     SettingsRepository? settingsRepository,
   })  : _settingsRepository = settingsRepository ?? SettingsRepository(),
-        super(SettingsState()){
+        super(SettingsState()) {
     _init();
   }
 
   Future<void> loadSettings() async {
+    print('Loading settings...');
+
     final temperature = await _settingsRepository.getTemperatureUnit();
     final pressure = await _settingsRepository.getPressureUnit();
     final distance = await _settingsRepository.getDistanceUnit();
+
+    print(
+        'Loaded settings: temperature=$temperature, pressure=$pressure, distance=$distance');
 
     emit(
       SettingsState(
@@ -27,6 +32,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         distance: distance,
       ),
     );
+  }
+
+  @override
+  void onChange(Change<SettingsState> change) {
+    super.onChange(change);
+    print('Settings state changed: $change');
   }
 
   Future<void> updateTemperatureUnit(TemperatureUnit unit) async {
@@ -38,6 +49,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     await _settingsRepository.setPressureUnit(unit);
     emit(state.copyWith(pressure: unit));
   }
+
   Future<void> updateDistanceUnit(DistanceUnit unit) async {
     await _settingsRepository.setDistanceUnit(unit);
     emit(state.copyWith(distance: unit));
